@@ -27,6 +27,12 @@ def fetch_tripadvisor_data(endpoint, params):
         response = requests.get(endpoint, params=params, timeout=10)  # Timeout de 10 secondes
         response.raise_for_status()  # Lève une exception pour les codes d'erreur HTTP
         data = response.json()
+        
+        # Vérifier si la clé 'data' existe dans la réponse
+        if 'data' not in data:
+            logger.error(f"No 'data' field in response from TripAdvisor for key: {cache_key}")
+            return None
+
         cache.set(cache_key, data, timeout=3600)  # Cache pour 1 heure
         logger.debug(f"Fetched and cached data for key: {cache_key}")
         return data
@@ -57,7 +63,7 @@ def fetch_nearby_attractions(lat, lng, radius, category='attractions'):
         'key': API_KEY,
         'latLong': f"{lat},{lng}",
         'radius': radius,
-        'categories': category,
+        'category': category,  # Utilisation du paramètre correct 'category'
         'limit': 10
     }
     logger.debug(f"Fetching nearby attractions with params: {params}")
