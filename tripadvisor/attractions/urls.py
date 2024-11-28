@@ -4,6 +4,6 @@ from django.urls import path
 from .views import AttractionDetailUpdate, NearbySearch
 
 urlpatterns = [
-    path('nearby/', NearbySearch.as_view(), name='nearby-attractions'),  # Spécifique en premier
+    path('nearby/', NearbySearch.as_view(), name='nearby-attractions'),
     path('<str:location_id>/', AttractionDetailUpdate.as_view(), name='attraction-detail'),
 ]
