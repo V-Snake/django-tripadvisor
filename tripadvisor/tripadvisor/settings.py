@@ -40,6 +40,10 @@ print(f"SECRET_KEY: {SECRET_KEY}")
 print(f"TripAdvisor API Key: {TRIPADVISOR_API_KEY}")
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 23968b3 (Mise en place de la variable d'environnement pour plus de sécurité de la API Key)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -48,10 +52,6 @@ print(f"TripAdvisor API Key: {TRIPADVISOR_API_KEY}")
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
-# TripAdvisor API Key
-TRIPADVISOR_API_KEY = 'A55B79E884304196917339DC80268158'
 
 
 # Application definition
