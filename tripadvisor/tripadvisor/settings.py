@@ -11,16 +11,38 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Initialisation de l'environnement
+env = environ.Env(
+    DEBUG=(bool, False)  # Définir le type attendu pour DEBUG
+)
+
+# Lire le fichier .env
+# Charger le fichier .env
+environ.Env.read_env(str(BASE_DIR / '.env'))
+
+# print(f"Base dir: {BASE_DIR}")
+# print("Env file loaded: ", BASE_DIR / '.env')
+
+
+
+# Utilisation des variables d'environnement
+SECRET_KEY = env("SECRET_KEY")  # Charger correctement la clé secrète
+DEBUG = env("DEBUG")  # Charger la variable DEBUG
+TRIPADVISOR_API_KEY = env("TRIPADVISOR_API_KEY")  # Charger l'API key
+
+print(f"SECRET_KEY: {SECRET_KEY}")
+# print(f"DEBUG: {DEBUG}")
+print(f"TripAdvisor API Key: {TRIPADVISOR_API_KEY}")
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1@!xcfltvgtx#&^fji&s2yq!6o4idkc(h@szdhkhyvx+@1a6^y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
