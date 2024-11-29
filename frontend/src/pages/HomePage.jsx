@@ -31,19 +31,18 @@ const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [selectedAttraction, setSelectedAttraction] = useState(null);
     const [userAttractions, setUserAttractions] = useState(() => {
-        // Charger les attractions depuis localStorage au chargement initial
         console.log("Fetching user attractions from localStorage...");
         const savedAttractions = localStorage.getItem("userAttractions");
         if (savedAttractions) {
             try {
                 const parsedAttractions = JSON.parse(savedAttractions);
                 console.log("Loaded user attractions from localStorage:", parsedAttractions);
-                return parsedAttractions; // Charger les attractions sauvegardées
+                return parsedAttractions;
             } catch (error) {
                 console.error("Failed to parse user attractions from localStorage:", error);
             }
         }
-        return []; // Retourne une liste vide si rien n'est trouvé
+        return [];
     });
 
     const navigate = useNavigate();
@@ -122,12 +121,22 @@ const HomePage = () => {
         setUserAttractions(updatedAttractions);
     };
 
+    const handleLogout = () => {
+        console.log("Logging out user...");
+        localStorage.clear(); // Supprimer toutes les données de localStorage
+        setUserAttractions([]); // Réinitialiser les attractions sélectionnées
+        navigate("/"); // Rediriger vers la page d'accueil
+    };
+
     if (loading) return <div>Loading...</div>;
     if (attractions.length === 0) return <div>No attractions found.</div>;
 
     return (
         <Container className="mt-4">
             <h1 className="text-center mb-4">Popular Attractions</h1>
+            <Button variant="danger" className="mb-4" onClick={handleLogout}>
+                Logout
+            </Button>
             <Carousel
                 onSelect={(selectedIndex) => {
                     const selected = attractions[selectedIndex];
