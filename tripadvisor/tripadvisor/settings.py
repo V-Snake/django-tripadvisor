@@ -41,9 +41,13 @@ print(f"TripAdvisor API Key: {TRIPADVISOR_API_KEY}")
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 23968b3 (Mise en place de la variable d'environnement pour plus de sécurité de la API Key)
+=======
+
+>>>>>>> fff48209f0015277e46cab788b2542b1b08ac192
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
