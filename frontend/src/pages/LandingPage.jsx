@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
 const LandingPage = () => {
-    const [profile, setProfile] = useState(""); // Profil de l'utilisateur
-    const [countries, setCountries] = useState([]); // Liste des pays
-    const [selectedCountry, setSelectedCountry] = useState(""); // Pays sélectionné
-    const [capitalCoordinates, setCapitalCoordinates] = useState(null); // Coordonnées GPS
+    const [profile, setProfile] = useState("");
+    const [countries, setCountries] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState("");
+    const [capitalCoordinates, setCapitalCoordinates] = useState(null);
     const navigate = useNavigate();
 
-    // Charger la liste des pays au montage
     useEffect(() => {
         fetch("https://restcountries.com/v3.1/all")
             .then((response) => response.json())
@@ -23,23 +23,11 @@ const LandingPage = () => {
             .catch((error) => console.error("Error fetching countries:", error));
     }, []);
 
-    const handleProfileChange = (event) => {
-        setProfile(event.target.value);
-    };
-
-    const handleCountryChange = (event) => {
-        const selected = countries.find((c) => c.name === event.target.value);
-        setSelectedCountry(selected.name);
-        setCapitalCoordinates(selected.latlng);
-    };
-
     const handleSubmit = () => {
         if (profile && selectedCountry && capitalCoordinates) {
-            // Stocker les informations dans localStorage
             localStorage.setItem("profile", profile);
             localStorage.setItem("country", selectedCountry);
             localStorage.setItem("coordinates", JSON.stringify(capitalCoordinates));
-            // Rediriger vers la page d'accueil
             navigate("/home");
         } else {
             alert("Please select a profile and a country.");
@@ -47,51 +35,62 @@ const LandingPage = () => {
     };
 
     return (
-        <div>
-            <h1>Welcome to TripAdvisor Clone</h1>
-            <div>
-                <h2>Select your profile</h2>
-                <label>
-                    <input
-                        type="radio"
-                        value="local"
-                        checked={profile === "local"}
-                        onChange={handleProfileChange}
-                    />
-                    Local
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        value="tourist"
-                        checked={profile === "tourist"}
-                        onChange={handleProfileChange}
-                    />
-                    Tourist
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        value="professional"
-                        checked={profile === "professional"}
-                        onChange={handleProfileChange}
-                    />
-                    Professional
-                </label>
+        <Container className="mt-5">
+            <h1 className="text-center mb-4">Welcome to TripAdvisor Clone</h1>
+            <Row>
+                <Col md={6}>
+                    <h2>Select Your Profile</h2>
+                    <Form>
+                        <Form.Check
+                            type="radio"
+                            label="Local"
+                            value="local"
+                            name="profile"
+                            onChange={(e) => setProfile(e.target.value)}
+                            checked={profile === "local"}
+                        />
+                        <Form.Check
+                            type="radio"
+                            label="Tourist"
+                            value="tourist"
+                            name="profile"
+                            onChange={(e) => setProfile(e.target.value)}
+                            checked={profile === "tourist"}
+                        />
+                        <Form.Check
+                            type="radio"
+                            label="Professional"
+                            value="professional"
+                            name="profile"
+                            onChange={(e) => setProfile(e.target.value)}
+                            checked={profile === "professional"}
+                        />
+                    </Form>
+                </Col>
+                <Col md={6}>
+                    <h2>Select Your Country</h2>
+                    <Form.Select
+                        onChange={(e) => {
+                            const selected = countries.find((c) => c.name === e.target.value);
+                            setSelectedCountry(selected.name);
+                            setCapitalCoordinates(selected.latlng);
+                        }}
+                    >
+                        <option value="">-- Select a Country --</option>
+                        {countries.map((country) => (
+                            <option key={country.name} value={country.name}>
+                                {country.name}
+                            </option>
+                        ))}
+                    </Form.Select>
+                </Col>
+            </Row>
+            <div className="text-center mt-4">
+                <Button variant="primary" onClick={handleSubmit}>
+                    Continue
+                </Button>
             </div>
-            <div>
-                <h2>Select your country</h2>
-                <select value={selectedCountry} onChange={handleCountryChange}>
-                    <option value="">-- Select a Country --</option>
-                    {countries.map((country) => (
-                        <option key={country.name} value={country.name}>
-                            {country.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <button onClick={handleSubmit}>Continue</button>
-        </div>
+        </Container>
     );
 };
 
