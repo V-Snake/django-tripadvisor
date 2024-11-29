@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Container, Card, Button } from "react-bootstrap";
+import { Container, Card } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 
-const AttractionPage = ({ match }) => {
+const AttractionPage = () => {
+    const { id } = useParams();
     const [attraction, setAttraction] = useState(null);
 
     useEffect(() => {
         const fetchAttractionDetails = async () => {
-            const response = await fetch(`/api/attractions/${match.params.id}`);
-            const data = await response.json();
-            setAttraction(data);
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/attractions/${id}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setAttraction(data);
+                } else {
+                    console.error("Failed to fetch attraction details:", await response.text());
+                }
+            } catch (error) {
+                console.error("Error fetching attraction details:", error);
+            }
         };
+
         fetchAttractionDetails();
-    }, [match.params.id]);
+    }, [id]);
 
     if (!attraction) return <div>Loading...</div>;
 
@@ -28,17 +39,13 @@ const AttractionPage = ({ match }) => {
                     <Card.Text>{attraction.description || "No description available."}</Card.Text>
                     <ul>
                         <li><strong>Category:</strong> {attraction.category}</li>
+                        <li><strong>Price Level:</strong> {attraction.price_level || "N/A"}</li>
                         <li><strong>Rating:</strong> {attraction.rating || "N/A"}</li>
                         <li><strong>Reviews:</strong> {attraction.num_reviews || "N/A"}</li>
+                        <li><strong>Address:</strong> {attraction.address?.address_string || "N/A"}</li>
+                        <li><strong>Phone:</strong> {attraction.phone || "N/A"}</li>
+                        <li><strong>Website:</strong> <a href={attraction.website} target="_blank" rel="noopener noreferrer">{attraction.website}</a></li>
                     </ul>
-                    <Button
-                        href={attraction.web_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        variant="primary"
-                    >
-                        View on TripAdvisor
-                    </Button>
                 </Card.Body>
             </Card>
         </Container>
